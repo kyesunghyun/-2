@@ -3,10 +3,810 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>The Hunters App</title>
+    <title>THE HUNTERS</title>
+    <style>
+      :root {
+        --primary: #6e19b8;
+        --primary-soft: #f3e8ff;
+        --background: #ffffff;
+        --surface: #f7f7fb;
+        --card: #ffffff;
+        --text: #0f0f13;
+        --text-secondary: #6b7280;
+        --border: #e9e9f2;
+        --success: #22c55e;
+      }
+
+      * { box-sizing: border-box; }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: Pretendard, -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+        color: var(--text);
+        background:
+          radial-gradient(circle at 18% 8%, rgba(110, 25, 184, .12), transparent 28%),
+          linear-gradient(135deg, #ffffff 0%, #f7f7fb 52%, #ffffff 100%);
+      }
+
+      button {
+        font: inherit;
+        color: inherit;
+      }
+
+      .app {
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        padding: 28px;
+      }
+
+      .screen {
+        position: relative;
+        width: min(390px, 100%);
+        min-height: 780px;
+        padding: 24px;
+        overflow: hidden;
+        border: 1px solid var(--border);
+        border-radius: 28px;
+        background: rgba(255, 255, 255, .96);
+        box-shadow: 0 30px 80px rgba(66, 36, 94, .16);
+      }
+
+      .wave {
+        position: absolute;
+        left: -22%;
+        right: -22%;
+        top: -94px;
+        height: 188px;
+        border-radius: 0 0 50% 50%;
+        background: linear-gradient(135deg, rgba(243, 232, 255, .95), rgba(255, 255, 255, .12));
+      }
+
+      .top {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        min-height: 34px;
+        color: var(--text-secondary);
+        font-size: 13px;
+        font-weight: 700;
+      }
+
+      .back {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        color: var(--text-secondary);
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      .back[disabled] {
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      .content {
+        position: relative;
+        z-index: 1;
+        min-height: 575px;
+        padding-top: 54px;
+      }
+
+      .splash {
+        display: grid;
+        place-items: center;
+        align-content: center;
+        min-height: 470px;
+        text-align: center;
+      }
+
+      .brand-mark {
+        display: grid;
+        place-items: center;
+        width: 120px;
+        height: 120px;
+        margin-bottom: 20px;
+        border-radius: 34px;
+        background: var(--primary);
+        color: #ffffff;
+        font-size: 36px;
+        font-weight: 900;
+        line-height: 1;
+        box-shadow: 0 18px 44px rgba(110, 25, 184, .24);
+      }
+
+      h1 {
+        margin: 0 0 14px;
+        font-size: 32px;
+        font-weight: 800;
+        line-height: 1.15;
+        letter-spacing: 0;
+      }
+
+      .splash h1 {
+        margin-bottom: 8px;
+      }
+
+      .subtitle {
+        margin: 0 0 28px;
+        color: var(--text-secondary);
+        font-size: 15px;
+        line-height: 1.55;
+      }
+
+      .list {
+        display: grid;
+        gap: 12px;
+      }
+
+      .card,
+      .choice,
+      .mission,
+      .action,
+      .market-card,
+      .summary,
+      .detail {
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        background: var(--card);
+        box-shadow: 0 8px 24px rgba(15, 15, 19, .06);
+      }
+
+      .card,
+      .mission,
+      .action,
+      .detail {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        width: 100%;
+        min-height: 72px;
+        padding: 16px;
+        text-align: left;
+      }
+
+      .icon {
+        display: grid;
+        place-items: center;
+        flex: 0 0 auto;
+        width: 38px;
+        height: 38px;
+        border-radius: 14px;
+        background: var(--primary-soft);
+        color: var(--primary);
+        font-size: 18px;
+        font-weight: 800;
+      }
+
+      .card strong,
+      .mission strong,
+      .action strong,
+      .detail strong,
+      .summary strong {
+        display: block;
+        font-size: 15px;
+      }
+
+      .card p,
+      .mission small,
+      .action small,
+      .detail p,
+      .summary p {
+        display: block;
+        margin: 5px 0 0;
+        color: var(--text-secondary);
+        font-size: 12px;
+        line-height: 1.5;
+      }
+
+      .choice {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        min-height: 52px;
+        padding: 0 16px;
+        border-radius: 14px;
+        color: var(--text);
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      .choice.active,
+      .mission.active,
+      .action.active {
+        border-color: var(--primary);
+        background: var(--primary-soft);
+        color: var(--primary);
+      }
+
+      .mission,
+      .action {
+        cursor: pointer;
+      }
+
+      .check {
+        display: grid;
+        place-items: center;
+        width: 24px;
+        height: 24px;
+        border: 1px solid #d9c7ed;
+        border-radius: 8px;
+        color: #ffffff;
+        background: #ffffff;
+        font-size: 14px;
+        font-weight: 900;
+      }
+
+      .mission.active .check {
+        border-color: var(--primary);
+        background: var(--primary);
+      }
+
+      .progress-wrap {
+        position: relative;
+        z-index: 1;
+        display: grid;
+        gap: 8px;
+        color: var(--text-secondary);
+        font-size: 12px;
+        font-weight: 700;
+      }
+
+      .progress {
+        height: 3px;
+        overflow: hidden;
+        border-radius: 999px;
+        background: var(--border);
+      }
+
+      .progress span {
+        display: block;
+        height: 100%;
+        border-radius: 999px;
+        background: var(--primary);
+        transition: width .2s ease;
+      }
+
+      .primary {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        width: 100%;
+        height: 56px;
+        margin-top: 18px;
+        border: 0;
+        border-radius: 16px;
+        background: var(--primary);
+        color: #ffffff;
+        font-size: 15px;
+        font-weight: 800;
+        cursor: pointer;
+      }
+
+      .primary[disabled] {
+        opacity: .35;
+        cursor: not-allowed;
+      }
+
+      .home-header {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        min-height: 34px;
+      }
+
+      .home-header strong {
+        font-size: 18px;
+      }
+
+      .home {
+        position: relative;
+        z-index: 1;
+        padding-top: 26px;
+        padding-bottom: 96px;
+      }
+
+      .home h2 {
+        margin: 24px 0 12px;
+        font-size: 18px;
+      }
+
+      .market {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+      }
+
+      .market-card {
+        min-height: 116px;
+        padding: 16px;
+      }
+
+      .market-card span {
+        color: var(--text-secondary);
+        font-size: 12px;
+        font-weight: 700;
+      }
+
+      .market-card strong {
+        display: block;
+        margin-top: 10px;
+        font-size: 19px;
+      }
+
+      .market-card small {
+        display: block;
+        margin-top: 8px;
+        color: #16a34a;
+        font-weight: 800;
+      }
+
+      .action {
+        color: var(--text);
+      }
+
+      .action .arrow {
+        margin-left: auto;
+        color: var(--primary);
+      }
+
+      .detail {
+        align-items: flex-start;
+        margin-top: 12px;
+        background: var(--surface);
+        box-shadow: none;
+      }
+
+      .summary {
+        margin-top: 20px;
+        padding: 16px;
+      }
+
+      .bottom-nav {
+        position: absolute;
+        z-index: 2;
+        left: 18px;
+        right: 18px;
+        bottom: 18px;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 5px;
+        padding: 8px;
+        border: 1px solid var(--border);
+        border-radius: 22px;
+        background: rgba(255, 255, 255, .94);
+        box-shadow: 0 16px 40px rgba(15, 15, 19, .08);
+      }
+
+      .bottom-nav button {
+        display: grid;
+        place-items: center;
+        gap: 4px;
+        min-height: 52px;
+        border: 0;
+        border-radius: 16px;
+        background: transparent;
+        color: var(--text-secondary);
+        font-size: 11px;
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      .bottom-nav button.active {
+        background: var(--primary-soft);
+        color: var(--primary);
+      }
+
+      .empty {
+        display: grid;
+        place-items: center;
+        align-content: center;
+        min-height: 570px;
+        text-align: center;
+      }
+
+      .empty .icon {
+        width: 68px;
+        height: 68px;
+        border-radius: 22px;
+        font-size: 24px;
+      }
+
+      .empty h1 {
+        margin-top: 18px;
+      }
+
+      .empty p {
+        max-width: 260px;
+        margin: 0;
+        color: var(--text-secondary);
+        line-height: 1.5;
+      }
+
+      @media (max-width: 440px) {
+        .app { padding: 0; }
+        .screen {
+          width: 100%;
+          min-height: 100vh;
+          border: 0;
+          border-radius: 0;
+        }
+        .content { min-height: calc(100vh - 205px); }
+        h1 { font-size: 30px; }
+      }
+    </style>
   </head>
   <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
+    <main class="app">
+      <section class="screen" id="app"></section>
+    </main>
+
+    <script>
+      const flow = [
+        {
+          id: "splash",
+          title: "THE HUNTERS",
+          subtitle: "Investment Community",
+          layout: "center_logo"
+        },
+        {
+          id: "value_proposition",
+          title: "투자를 배우는 가장 빠른 방법",
+          subtitle: "실전 투자 경험부터 금융권 네트워크까지",
+          layout: "large_text_left",
+          cards: [
+            { icon: "⌁", title: "실전 투자 경험" },
+            { icon: "T", title: "모의투자대회" },
+            { icon: "B", title: "금융권 네트워크" }
+          ]
+        },
+        {
+          id: "social_proof",
+          title: "함께 성장하는 투자 커뮤니티",
+          subtitle: "배우고, 기록하고, 함께 투자합니다.",
+          layout: "stacked_cards",
+          cards: [
+            { icon: "◎", title: "모의투자대회", description: "실전 같은 투자 경험" },
+            { icon: "▦", title: "기업 탐방", description: "실무 현장을 경험하는 기회" },
+            { icon: "U", title: "현직자 네트워크", description: "금융권 사람들과의 연결" }
+          ]
+        },
+        {
+          id: "investment_experience",
+          title: "현재 투자 경험은?",
+          layout: "single_choice",
+          key: "experience",
+          options: ["입문", "1년 미만", "1~3년", "3년 이상"]
+        },
+        {
+          id: "interest_field",
+          title: "관심 분야는?",
+          layout: "multi_choice",
+          key: "interests",
+          options: ["국내주식", "미국주식", "ETF", "가치투자", "퀀트", "거시경제"]
+        },
+        {
+          id: "goal_selection",
+          title: "더헌터스에서 얻고 싶은 것은?",
+          layout: "single_choice",
+          key: "goal",
+          options: ["투자 실력 향상", "금융권 취업", "투자 네트워크", "모의투자대회"]
+        },
+        {
+          id: "first_mission",
+          title: "첫 미션을 완료해보세요",
+          subtitle: "시작은 가볍게, 성장은 빠르게.",
+          layout: "checklist",
+          missions: [
+            { id: "profile", title: "자기소개 작성", description: "커뮤니티에 자신을 소개하기" },
+            { id: "watchlist", title: "관심종목 등록", description: "관심 있는 종목 추가하기" },
+            { id: "mock_investment", title: "모의투자 참여", description: "대회에 참여하기" }
+          ]
+        }
+      ];
+
+      const homeActions = [
+        {
+          id: "mock",
+          icon: "◎",
+          title: "모의투자대회",
+          description: "진행 중인 대회에 참여하세요",
+          detail: "진행 중인 대회에 참여하고 가상 포트폴리오를 구성할 수 있습니다."
+        },
+        {
+          id: "notice",
+          icon: "□",
+          title: "공지사항",
+          description: "최신 소식을 확인하세요",
+          detail: "스터디 일정, 기업 탐방, 커뮤니티 운영 소식을 확인합니다."
+        },
+        {
+          id: "education",
+          icon: "▣",
+          title: "교육자료",
+          description: "투자 지식을 쌓아보세요",
+          detail: "국내주식, 미국주식, ETF, 가치투자, 거시경제 자료를 학습합니다."
+        }
+      ];
+
+      const state = {
+        step: 0,
+        view: "onboarding",
+        tab: "home",
+        activeAction: "mock",
+        answers: {
+          interests: [],
+          missions: []
+        }
+      };
+
+      const root = document.getElementById("app");
+
+      function pad(value) {
+        return String(value).padStart(2, "0");
+      }
+
+      function canContinue() {
+        const current = flow[state.step];
+        if (current.layout === "single_choice") return Boolean(state.answers[current.key]);
+        if (current.layout === "multi_choice") return state.answers[current.key].length > 0;
+        if (current.layout === "checklist") return state.answers.missions.length > 0;
+        return true;
+      }
+
+      function render() {
+        if (state.view === "home") {
+          renderHome();
+          return;
+        }
+
+        const current = flow[state.step];
+        root.innerHTML = `
+          <div class="wave"></div>
+          <div class="top">
+            <button class="back" ${state.step === 0 ? "disabled" : ""} data-action="back">‹ 이전</button>
+            <span>${pad(state.step + 1)} / ${pad(flow.length)}</span>
+          </div>
+          <div class="content">${renderOnboardingContent(current)}</div>
+          <div class="progress-wrap">
+            <span>${pad(state.step + 1)} / ${pad(flow.length)}</span>
+            <div class="progress"><span style="width:${((state.step + 1) / flow.length) * 100}%"></span></div>
+          </div>
+          <button class="primary" data-action="next" ${canContinue() ? "" : "disabled"}>
+            ${state.step === flow.length - 1 ? "미션 시작하기" : state.step === 0 ? "시작하기" : "다음"} ›
+          </button>
+        `;
+      }
+
+      function renderOnboardingContent(screen) {
+        if (screen.layout === "center_logo") {
+          return `
+            <div class="splash">
+              <div class="brand-mark">H</div>
+              <h1>${screen.title}</h1>
+              <p class="subtitle">${screen.subtitle}</p>
+            </div>
+          `;
+        }
+
+        if (screen.layout === "large_text_left" || screen.layout === "stacked_cards") {
+          return `
+            <h1>${screen.title}</h1>
+            <p class="subtitle">${screen.subtitle}</p>
+            <div class="list">
+              ${screen.cards.map((card) => `
+                <article class="card">
+                  <span class="icon">${card.icon}</span>
+                  <div>
+                    <strong>${card.title}</strong>
+                    ${card.description ? `<p>${card.description}</p>` : ""}
+                  </div>
+                </article>
+              `).join("")}
+            </div>
+          `;
+        }
+
+        if (screen.layout === "single_choice" || screen.layout === "multi_choice") {
+          const selected = state.answers[screen.key] || (screen.layout === "multi_choice" ? [] : "");
+          return `
+            <h1>${screen.title}</h1>
+            <div class="list">
+              ${screen.options.map((option) => {
+                const active = Array.isArray(selected) ? selected.includes(option) : selected === option;
+                return `
+                  <button class="choice ${active ? "active" : ""}" data-choice="${option}">
+                    <span>${option}</span>
+                    <span>${active ? "✓" : ""}</span>
+                  </button>
+                `;
+              }).join("")}
+            </div>
+          `;
+        }
+
+        return `
+          <h1>${screen.title}</h1>
+          <p class="subtitle">${screen.subtitle}</p>
+          <div class="list">
+            ${screen.missions.map((mission) => {
+              const active = state.answers.missions.includes(mission.id);
+              return `
+                <button class="mission ${active ? "active" : ""}" data-mission="${mission.id}">
+                  <span class="check">${active ? "✓" : ""}</span>
+                  <span>
+                    <strong>${mission.title}</strong>
+                    <small>${mission.description}</small>
+                  </span>
+                </button>
+              `;
+            }).join("")}
+          </div>
+        `;
+      }
+
+      function renderHome() {
+        const views = {
+          home: renderHomeMain(),
+          market: renderEmpty("⌁", "마켓", "오늘의 시장과 관심종목을 확인하는 화면입니다."),
+          community: renderEmpty("U", "커뮤니티", "공지, Q&A, 활동 소식을 모아두는 화면입니다."),
+          profile: renderEmpty("P", "프로필", "내 투자 경험과 관심 분야를 관리합니다.")
+        };
+
+        root.innerHTML = `
+          <div class="wave"></div>
+          <div class="home-header">
+            <strong>THE HUNTERS</strong>
+            <span class="icon">B</span>
+          </div>
+          ${views[state.tab]}
+          <nav class="bottom-nav">
+            ${[
+              ["home", "⌂", "홈"],
+              ["market", "⌁", "마켓"],
+              ["community", "U", "커뮤니티"],
+              ["profile", "P", "프로필"]
+            ].map(([id, icon, label]) => `
+              <button class="${state.tab === id ? "active" : ""}" data-tab="${id}">
+                <span>${icon}</span>
+                <span>${label}</span>
+              </button>
+            `).join("")}
+          </nav>
+        `;
+      }
+
+      function renderHomeMain() {
+        const active = homeActions.find((action) => action.id === state.activeAction) || homeActions[0];
+        return `
+          <div class="home">
+            <h2>오늘의 시장</h2>
+            <div class="market">
+              <article class="market-card">
+                <span>KOSPI</span>
+                <strong>2,654.21</strong>
+                <small>+0.82%</small>
+              </article>
+              <article class="market-card">
+                <span>NASDAQ</span>
+                <strong>16,825.09</strong>
+                <small>+1.35%</small>
+              </article>
+            </div>
+
+            <h2>바로 실행</h2>
+            <div class="list">
+              ${homeActions.map((action) => `
+                <button class="action ${state.activeAction === action.id ? "active" : ""}" data-action-card="${action.id}">
+                  <span class="icon">${action.icon}</span>
+                  <span>
+                    <strong>${action.title}</strong>
+                    <small>${action.description}</small>
+                  </span>
+                  <span class="arrow">›</span>
+                </button>
+              `).join("")}
+            </div>
+
+            <section class="detail">
+              <span class="icon">${active.icon}</span>
+              <div>
+                <strong>${active.title}</strong>
+                <p>${active.detail}</p>
+              </div>
+            </section>
+
+            <section class="summary">
+              <strong>내 온보딩 정보</strong>
+              <p>경험: ${state.answers.experience || "미선택"}</p>
+              <p>관심: ${(state.answers.interests || []).join(", ") || "미선택"}</p>
+              <p>목표: ${state.answers.goal || "미선택"}</p>
+            </section>
+          </div>
+        `;
+      }
+
+      function renderEmpty(icon, title, text) {
+        return `
+          <div class="empty">
+            <span class="icon">${icon}</span>
+            <h1>${title}</h1>
+            <p>${text}</p>
+          </div>
+        `;
+      }
+
+      root.addEventListener("click", (event) => {
+        const target = event.target.closest("button");
+        if (!target) return;
+
+        if (target.dataset.action === "back") {
+          state.step = Math.max(0, state.step - 1);
+          render();
+          return;
+        }
+
+        if (target.dataset.action === "next") {
+          if (!canContinue()) return;
+          if (state.step === flow.length - 1) {
+            state.view = "home";
+          } else {
+            state.step += 1;
+          }
+          render();
+          return;
+        }
+
+        if (target.dataset.choice) {
+          const current = flow[state.step];
+          const option = target.dataset.choice;
+          if (current.layout === "single_choice") {
+            state.answers[current.key] = option;
+          } else {
+            const selected = state.answers[current.key];
+            state.answers[current.key] = selected.includes(option)
+              ? selected.filter((item) => item !== option)
+              : selected.concat(option);
+          }
+          render();
+          return;
+        }
+
+        if (target.dataset.mission) {
+          const id = target.dataset.mission;
+          state.answers.missions = state.answers.missions.includes(id)
+            ? state.answers.missions.filter((item) => item !== id)
+            : state.answers.missions.concat(id);
+          render();
+          return;
+        }
+
+        if (target.dataset.tab) {
+          state.tab = target.dataset.tab;
+          render();
+          return;
+        }
+
+        if (target.dataset.actionCard) {
+          state.activeAction = target.dataset.actionCard;
+          render();
+        }
+      });
+
+      render();
+    </script>
   </body>
 </html>
